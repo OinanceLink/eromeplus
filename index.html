@@ -1,1364 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101014">
-
-  <title>EromePlus — Discover Creators</title>
-
-  <meta name="description"
-        content="Discover creators, explore albums and connect with communities on EromePlus.">
-
-  <style>
-    :root {
-      --bg: #101014;
-      --panel: #19191f;
-      --panel2: #222229;
-      --pink: #ff3864;
-      --text: #ffffff;
-      --muted: #a3a3b2;
-      --border: #303039;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    button, input, select, textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .age-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: #101014;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .age-box {
-      width: 100%;
-      max-width: 430px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 30px 24px;
-      border-radius: 20px;
-      text-align: center;
-    }
-
-    .age-logo {
-      font-size: 31px;
-      font-weight: 900;
-      margin-bottom: 18px;
-    }
-
-    .age-logo span,
-    .brand span {
-      color: var(--pink);
-    }
-
-    .age-box h2 {
-      font-size: 24px;
-      margin-bottom: 12px;
-    }
-
-    .age-box p {
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .age-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .age-actions button {
-      flex: 1;
-    }
-
-    .btn {
-      border: 0;
-      padding: 12px 16px;
-      border-radius: 9px;
-      font-weight: 700;
-      color: white;
-      background: var(--panel2);
-    }
-
-    .btn-primary {
-      background: var(--pink);
-      color: white;
-    }
-
-    .btn:hover {
-      opacity: .88;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(16,16,20,.96);
-      backdrop-filter: blur(15px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav {
-      max-width: 1250px;
-      margin: auto;
-      min-height: 70px;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .brand {
-      font-size: 25px;
-      font-weight: 900;
-      white-space: nowrap;
-      letter-spacing: -.8px;
-    }
-
-    .search {
-      flex: 1;
-      max-width: 470px;
-      position: relative;
-    }
-
-    .search input {
-      width: 100%;
-      background: var(--panel);
-      color: white;
-      border: 1px solid var(--border);
-      padding: 12px 15px 12px 40px;
-      border-radius: 10px;
-      outline: none;
-    }
-
-    .search input:focus {
-      border-color: var(--pink);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 13px;
-      top: 11px;
-      color: var(--muted);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nav-actions .btn {
-      padding: 10px 13px;
-    }
-
-    .mobile-search {
-      display: none;
-      padding: 0 20px 14px;
-    }
-
-    .main {
-      max-width: 1250px;
-      margin: auto;
-      padding: 25px 20px 50px;
-    }
-
-    .hero {
-      background:
-        radial-gradient(ellipse at 85% 20%, rgba(255,56,100,.2), transparent 45%),
-        linear-gradient(120deg, #22212a, #17171d);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 34px;
-      margin-bottom: 28px;
-      overflow: hidden;
-    }
-
-    .hero-tag {
-      color: var(--pink);
-      text-transform: uppercase;
-      font-weight: 800;
-      letter-spacing: 2px;
-      font-size: 11px;
-      margin-bottom: 13px;
-    }
-
-    .hero h1 {
-      font-size: clamp(30px, 5vw, 47px);
-      max-width: 650px;
-      line-height: 1.12;
-      margin-bottom: 15px;
-    }
-
-    .hero p {
-      color: var(--muted);
-      max-width: 570px;
-      line-height: 1.7;
-      margin-bottom: 23px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 11px;
-    }
-
-    .notice {
-      background: rgba(255,56,100,.07);
-      border: 1px solid rgba(255,56,100,.25);
-      padding: 12px 15px;
-      border-radius: 10px;
-      color: #ffc1cf;
-      font-size: 12px;
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
-
-    .section {
-      margin-top: 32px;
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 17px;
-    }
-
-    .section-heading h2 {
-      font-size: 21px;
-    }
-
-    .section-heading p {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 5px;
-    }
-
-    .pink-text {
-      color: var(--pink);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .categories {
-      display: flex;
-      gap: 9px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      scrollbar-width: thin;
-    }
-
-    .category {
-      border: 1px solid var(--border);
-      border-radius: 30px;
-      background: var(--panel);
-      color: var(--muted);
-      padding: 10px 16px;
-      white-space: nowrap;
-      font-size: 13px;
-    }
-
-    .category.active,
-    .category:hover {
-      background: var(--pink);
-      border-color: var(--pink);
-      color: white;
-    }
-
-    .album-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 17px;
-    }
-
-    .album {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      overflow: hidden;
-      min-width: 0;
-      transition: transform .2s, border-color .2s;
-    }
-
-    .album:hover {
-      transform: translateY(-3px);
-      border-color: #55515d;
-    }
-
-    .album-cover {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      background: #28232d;
-      overflow: hidden;
-    }
-
-    .album-cover img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform .3s;
-    }
-
-    .album:hover .album-cover img {
-      transform: scale(1.04);
-    }
-
-    .cover-label {
-      position: absolute;
-      left: 10px;
-      top: 10px;
-      background: rgba(0,0,0,.75);
-      padding: 5px 8px;
-      border-radius: 5px;
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .album-info {
-      padding: 13px;
-    }
-
-    .album-title {
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.4;
-      margin-bottom: 9px;
-    }
-
-    .creator {
-      color: var(--muted);
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex-wrap: wrap;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      gap: 5px;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-      margin-top: 11px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #2387ff;
-      color: white;
-      font-size: 10px;
-      font-weight: 900;
-    }
-
-    .badge.vip {
-      border: 2px solid #dceaff;
-      outline: 1px solid #2387ff;
-    }
-
-    .badge.owner {
-      background: var(--pink);
-    }
-
-    .empty-state {
-      display: none;
-      padding: 35px 15px;
-      text-align: center;
-      color: var(--muted);
-      border: 1px dashed var(--border);
-      border-radius: 12px;
-      margin-top: 15px;
-    }
-
-    .creator-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 15px;
-    }
-
-    .creator-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      padding: 15px;
-      border-radius: 12px;
-      min-width: 0;
-    }
-
-    .avatar {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff3864, #7a3cff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-
-    .creator-name {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .creator-small {
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .upload-box {
-      background: var(--panel);
-      border: 1px dashed #57515e;
-      border-radius: 15px;
-      padding: 25px;
-    }
-
-    .upload-box h3 {
-      margin-bottom: 8px;
-    }
-
-    .upload-box p {
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 13px;
-      margin-bottom: 16px;
-    }
-
-    .upload-form {
-      display: grid;
-      gap: 13px;
-    }
-
-    .field {
-      display: grid;
-      gap: 7px;
-    }
-
-    .field label {
-      font-size: 12px;
-      color: #d6d6df;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      background: #111116;
-      border: 1px solid var(--border);
-      color: white;
-      border-radius: 8px;
-      padding: 12px;
-      outline: none;
-    }
-
-    .field textarea {
-      resize: vertical;
-      min-height: 75px;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: var(--pink);
-    }
-
-    .checkbox-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .checkbox-row input {
-      margin-top: 3px;
-    }
-
-    .preview-list {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .preview-list img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .footer {
-      border-top: 1px solid var(--border);
-      padding: 28px 20px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 2;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 17px;
-      margin: 10px 0;
-    }
-
-    .footer a:hover {
-      color: var(--pink);
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #25252e;
-      border: 1px solid var(--border);
-      padding: 13px 18px;
-      border-radius: 10px;
-      box-shadow: 0 8px 30px #0008;
-      z-index: 2000;
-      display: none;
-      max-width: calc(100% - 30px);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 950px) {
-      .album-grid,
-      .creator-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 650px) {
-      .nav {
-        min-height: 62px;
-        padding: 12px 15px;
-        gap: 10px;
-      }
-
-      .brand {
-        font-size: 22px;
-      }
-
-      .nav > .search {
-        display: none;
-      }
-
-      .mobile-search {
-        display: block;
-        padding: 0 15px 13px;
-      }
-
-      .nav-actions {
-        gap: 6px;
-      }
-
-      .nav-actions .btn {
-        padding: 9px 10px;
-        font-size: 12px;
-      }
-
-      .main {
-        padding: 18px 14px 40px;
-      }
-
-      .hero {
-        padding: 25px 20px;
-      }
-
-      .album-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 11px;
-      }
-
-      .creator-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 9px;
-      }
-
-      .creator-card {
-        padding: 10px;
-        gap: 8px;
-      }
-
-      .avatar {
-        width: 36px;
-        height: 36px;
-        font-size: 12px;
-      }
-
-      .album-info {
-        padding: 10px;
-      }
-
-      .album-title {
-        font-size: 12px;
-      }
-
-      .creator {
-        font-size: 10px;
-      }
-
-      .stats {
-        font-size: 10px;
-      }
-
-      .upload-box {
-        padding: 18px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101014">
+<meta name="description" content="Discover creators, explore albums and connect with communities on EromePlus.">
+<title>EromePlus — Discover Creators</title>
+
+<style>
+:root {
+  --bg:#101014;
+  --panel:#19191f;
+  --panel2:#222229;
+  --pink:#ff3864;
+  --text:#fff;
+  --muted:#a3a3b2;
+  --border:#303039;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+button,input,select,textarea { font:inherit; }
+button { cursor:pointer; }
+a { color:inherit; text-decoration:none; }
+.btn { border:0; padding:12px 16px; border-radius:9px; font-weight:700; color:white; background:var(--panel2); }
+.btn-primary { background:var(--pink); }
+.btn:hover { opacity:.88; }
+.brand { font-size:25px; font-weight:900; white-space:nowrap; }
+.brand span,.age-logo span { color:var(--pink); }
+
+.age-screen {
+  position:fixed; inset:0; z-index:1000; background:var(--bg);
+  display:flex; align-items:center; justify-content:center; padding:24px;
+}
+.age-box {
+  width:100%; max-width:430px; background:var(--panel);
+  border:1px solid var(--border); padding:30px 24px;
+  border-radius:20px; text-align:center;
+}
+.age-logo { font-size:31px; font-weight:900; margin-bottom:18px; }
+.age-box h2 { font-size:24px; margin-bottom:12px; }
+.age-box p { color:var(--muted); line-height:1.6; font-size:14px; margin-bottom:20px; }
+.age-actions { display:flex; gap:10px; }
+.age-actions button { flex:1; }
+
+.topbar { position:sticky; top:0; z-index:100; background:rgba(16,16,20,.96); border-bottom:1px solid var(--border); }
+.nav { max-width:1250px; margin:auto; min-height:70px; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.search { flex:1; max-width:470px; position:relative; }
+.search input { width:100%; background:var(--panel); color:white; border:1px solid var(--border); padding:12px 15px 12px 40px; border-radius:10px; outline:none; }
+.search input:focus { border-color:var(--pink); }
+.search-icon { position:absolute; left:13px; top:11px; color:var(--muted); }
+.nav-actions { display:flex; align-items:center; gap:8px; }
+.nav-actions .btn { padding:10px 13px; }
+.mobile-search { display:none; padding:0 20px 14px; }
+
+.main { max-width:1250px; margin:auto; padding:25px 20px 50px; }
+.hero {
+  background:radial-gradient(ellipse at 85% 20%,rgba(255,56,100,.2),transparent 45%),linear-gradient(120deg,#22212a,#17171d);
+  border:1px solid var(--border); border-radius:18px; padding:34px; margin-bottom:28px;
+}
+.hero-tag { color:var(--pink); text-transform:uppercase; font-weight:800; letter-spacing:2px; font-size:11px; margin-bottom:13px; }
+.hero h1 { font-size:clamp(30px,5vw,47px); max-width:650px; line-height:1.12; margin-bottom:15px; }
+.hero p { color:var(--muted); max-width:570px; line-height:1.7; margin-bottom:23px; }
+.hero-buttons { display:flex; flex-wrap:wrap; gap:11px; }
+.notice { background:rgba(255,56,100,.07); border:1px solid rgba(255,56,100,.25); padding:12px 15px; border-radius:10px; color:#ffc1cf; font-size:12px; line-height:1.6; margin-bottom:28px; }
+.section { margin-top:32px; scroll-margin-top:100px; }
+.section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:17px; }
+.section-heading h2 { font-size:21px; }
+.section-heading p { color:var(--muted); font-size:12px; margin-top:5px; }
+.pink-text { color:var(--pink); font-size:13px; font-weight:700; }
+.categories { display:flex; gap:9px; overflow-x:auto; padding-bottom:8px; }
+.category { border:1px solid var(--border); border-radius:30px; background:var(--panel); color:var(--muted); padding:10px 16px; white-space:nowrap; font-size:13px; }
+.category.active,.category:hover { background:var(--pink); border-color:var(--pink); color:white; }
+.album-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:17px; }
+.album { background:var(--panel); border:1px solid var(--border); border-radius:13px; overflow:hidden; min-width:0; transition:transform .2s; }
+.album:hover { transform:translateY(-3px); }
+.album-cover { aspect-ratio:4/3; background:#28232d; overflow:hidden; position:relative; }
+.album-cover img { width:100%; height:100%; object-fit:cover; display:block; }
+.cover-label { position:absolute; left:10px; top:10px; background:#000b; padding:5px 8px; border-radius:5px; font-size:10px; font-weight:800; }
+.album-info { padding:13px; }
+.album-title { font-size:14px; font-weight:700; line-height:1.4; margin-bottom:9px; }
+.creator { color:var(--muted); font-size:12px; }
+.stats { display:flex; justify-content:space-between; gap:5px; border-top:1px solid var(--border); padding-top:10px; margin-top:11px; color:var(--muted); font-size:11px; }
+.badge { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:#2387ff; color:white; font-size:10px; font-weight:900; }
+.badge.vip { outline:1px solid #2387ff; }
+.badge.owner { background:var(--pink); }
+.empty-state { display:none; padding:35px 15px; text-align:center; color:var(--muted); border:1px dashed var(--border); border-radius:12px; margin-top:15px; }
+.creator-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:15px; }
+.creator-card { display:flex; align-items:center; gap:12px; background:var(--panel); border:1px solid var(--border); padding:15px; border-radius:12px; min-width:0; }
+.avatar { width:45px; height:45px; border-radius:50%; background:linear-gradient(135deg,#ff3864,#7a3cff); display:flex; align-items:center; justify-content:center; font-weight:900; flex-shrink:0; }
+.creator-name { font-size:13px; font-weight:700; margin-bottom:5px; }
+.creator-small { color:var(--muted); font-size:11px; }
+.upload-box { background:var(--panel); border:1px dashed #57515e; border-radius:15px; padding:25px; }
+.upload-box h3 { margin-bottom:8px; }
+.upload-box p { color:var(--muted); line-height:1.6; font-size:13px; margin-bottom:16px; }
+.upload-form { display:grid; gap:13px; }
+.field { display:grid; gap:7px; }
+.field label { font-size:12px; color:#d6d6df; }
+.field input,.field select,.field textarea { width:100%; background:#111116; border:1px solid var(--border); color:white; border-radius:8px; padding:12px; outline:none; }
+.field textarea { resize:vertical; min-height:75px; }
+.checkbox-row { display:flex; align-items:flex-start; gap:9px; color:var(--muted); font-size:12px; line-height:1.6; }
+.checkbox-row input { margin-top:3px; }
+.preview-list { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.preview-list img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; }
+.footer { border-top:1px solid var(--border); padding:28px 20px; text-align:center; color:var(--muted); font-size:12px; line-height:2; }
+.footer-links { display:flex; justify-content:center; flex-wrap:wrap; gap:17px; margin:10px 0; }
+.footer a:hover { color:var(--pink); }
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#25252e; border:1px solid var(--border); padding:13px 18px; border-radius:10px; z-index:4000; display:none; max-width:calc(100% - 30px); font-size:13px; line-height:1.5; }
+
+.ep-account-btn { background:var(--pink); color:white; border:0; padding:10px 14px; border-radius:9px; font-weight:bold; }
+.ep-auth-overlay { position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.82); display:none; align-items:center; justify-content:center; padding:18px; overflow-y:auto; }
+.ep-auth-box { width:100%; max-width:410px; background:var(--panel); color:white; border:1px solid var(--border); border-radius:17px; padding:25px; position:relative; }
+.ep-auth-box h2 { margin-bottom:8px; }
+.ep-auth-muted { color:var(--muted); font-size:13px; line-height:1.6; margin-bottom:18px; }
+.ep-auth-box input { display:block; width:100%; padding:13px; margin:10px 0; background:#101014; color:white; border:1px solid var(--border); border-radius:8px; outline:none; }
+.ep-auth-box input:focus { border-color:var(--pink); }
+.ep-auth-submit { width:100%; padding:13px; background:var(--pink); color:white; border:0; border-radius:8px; font-weight:bold; margin-top:8px; }
+.ep-auth-link { color:#ff6685; background:none; border:0; cursor:pointer; margin-top:15px; font-size:13px; }
+.ep-auth-close { position:absolute; right:15px; top:12px; border:0; background:none; color:white; font-size:25px; }
+.ep-auth-message { font-size:13px; line-height:1.6; margin-top:14px; overflow-wrap:anywhere; }
+.ep-auth-status { color:var(--muted); font-size:11px; margin-top:6px; overflow-wrap:anywhere; }
+
+@media(max-width:950px) {
+  .album-grid,.creator-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:650px) {
+  .nav { min-height:62px; padding:12px 15px; gap:8px; }
+  .brand { font-size:22px; }
+  .nav>.search { display:none; }
+  .mobile-search { display:block; padding:0 15px 13px; }
+  .nav-actions { gap:5px; }
+  .nav-actions .btn,.ep-account-btn { padding:9px 8px; font-size:11px; }
+  .main { padding:18px 14px 40px; }
+  .hero { padding:25px 20px; }
+  .album-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; }
+  .creator-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+  .creator-card { padding:10px; gap:8px; }
+  .avatar { width:36px; height:36px; font-size:12px; }
+  .album-info { padding:10px; }
+  .album-title { font-size:12px; }
+  .creator,.stats { font-size:10px; }
+  .upload-box { padding:18px; }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Adults-only entry screen -->
-  <div class="age-screen" id="ageScreen">
-    <div class="age-box">
-      <div class="age-logo">Erome<span>Plus</span></div>
-      <h2>Welcome to EromePlus</h2>
-      <p>
-        This community is intended exclusively for adults aged 18 and over.
-        By continuing, you confirm that you are at least 18 and agree to follow
-        the site's safety and consent rules.
-      </p>
-      <div class="age-actions">
-        <button class="btn btn-primary" id="enterSite">I am 18 or older</button>
-        <button class="btn" id="leaveSite">Leave</button>
-      </div>
-      <p style="margin:16px 0 0;font-size:11px">
-        This prototype's age screen is not verified age assurance.
-      </p>
+<div class="age-screen" id="ageScreen">
+  <div class="age-box">
+    <div class="age-logo">Erome<span>Plus</span></div>
+    <h2>Welcome to EromePlus</h2>
+    <p>This community is intended exclusively for adults aged 18 and over. By continuing, you confirm that you are at least 18 and agree to follow the site's safety and consent rules.</p>
+    <div class="age-actions">
+      <button class="btn btn-primary" id="enterSite">I am 18 or older</button>
+      <button class="btn" id="leaveSite">Leave</button>
+    </div>
+    <p style="margin:16px 0 0;font-size:11px">This prototype's age screen is not verified age assurance.</p>
+  </div>
+</div>
+
+<header class="topbar">
+  <nav class="nav">
+    <a class="brand" href="#">Erome<span>Plus</span></a>
+    <div class="search">
+      <span class="search-icon">⌕</span>
+      <input id="searchInput" type="search" placeholder="Search albums and creators...">
+    </div>
+    <div class="nav-actions">
+      <button class="btn" id="browseButton">Explore</button>
+      <button class="btn btn-primary" id="uploadButton">＋ Upload</button>
+    </div>
+  </nav>
+  <div class="mobile-search">
+    <div class="search">
+      <span class="search-icon">⌕</span>
+      <input id="mobileSearchInput" type="search" placeholder="Search albums and creators...">
     </div>
   </div>
+</header>
 
-  <header class="topbar">
-    <nav class="nav">
-      <a class="brand" href="#">Erome<span>Plus</span></a>
-
-      <div class="search">
-        <span class="search-icon">⌕</span>
-        <input id="searchInput" type="search"
-               placeholder="Search albums and creators...">
-      </div>
-
-      <div class="nav-actions">
-        <button class="btn" id="browseButton">Explore</button>
-        <button class="btn btn-primary" id="uploadButton">＋ Upload</button>
-      </div>
-    </nav>
-
-    <div class="mobile-search">
-      <div class="search">
-        <span class="search-icon">⌕</span>
-        <input id="mobileSearchInput" type="search"
-               placeholder="Search albums and creators...">
-      </div>
+<main class="main">
+  <section class="hero">
+    <div class="hero-tag">Discover · Create · Connect</div>
+    <h1>Your next favourite creator is waiting.</h1>
+    <p>Explore creator profiles, discover photo albums and find communities that match your interests. A new home for creators and their audiences.</p>
+    <div class="hero-buttons">
+      <button class="btn btn-primary" id="exploreButton">Explore Albums →</button>
+      <button class="btn" id="creatorsButton">Meet Creators</button>
     </div>
-  </header>
+  </section>
 
-  <main class="main">
+  <div class="notice"><strong>Prototype notice:</strong> Sample creators and albums below are demonstration content. Real accounts and permanent uploads require backend setup.</div>
 
-    <section class="hero">
-      <div class="hero-tag">Discover · Create · Connect</div>
-      <h1>Your next favourite creator is waiting.</h1>
-      <p>
-        Explore creator profiles, discover photo albums and find communities
-        that match your interests. A new home for creators and their audiences.
-      </p>
-      <div class="hero-buttons">
-        <button class="btn btn-primary" id="exploreButton">Explore Albums →</button>
-        <button class="btn" id="creatorsButton">Meet Creators</button>
-      </div>
-    </section>
-
-    <div class="notice">
-      <strong>Prototype notice:</strong> Sample creators and albums below are
-      demonstration content. This website does not yet have real accounts,
-      permanent uploads, verified badges or a working membership system.
+  <section class="section" id="exploreSection">
+    <div class="section-heading">
+      <div><h2>Explore Albums</h2><p>Discover something new.</p></div>
+      <span class="pink-text">Discover more ↗</span>
+    </div>
+    <div class="categories" id="categories">
+      <button class="category active" data-category="all">All</button>
+      <button class="category" data-category="photography">Photography</button>
+      <button class="category" data-category="fashion">Fashion</button>
+      <button class="category" data-category="travel">Travel</button>
+      <button class="category" data-category="lifestyle">Lifestyle</button>
+      <button class="category" data-category="art">Art &amp; Design</button>
     </div>
 
-    <section class="section" id="exploreSection">
-      <div class="section-heading">
-        <div>
-          <h2>Explore Albums</h2>
-          <p>Discover something new.</p>
-        </div>
-        <span class="pink-text">Discover more ↗</span>
-      </div>
-
-      <div class="categories" id="categories">
-        <button class="category active" data-category="all">All</button>
-        <button class="category" data-category="photography">Photography</button>
-        <button class="category" data-category="fashion">Fashion</button>
-        <button class="category" data-category="travel">Travel</button>
-        <button class="category" data-category="lifestyle">Lifestyle</button>
-        <button class="category" data-category="art">Art & Design</button>
-      </div>
-
-      <div class="album-grid" id="albumGrid">
-
-        <article class="album" data-category="photography" data-search="golden hour photography studio">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=700&q=80"
-                 alt="Golden hour landscape" loading="lazy">
-            <span class="cover-label">FEATURED</span>
-          </div>
-          <div class="album-info">
-            <div class="album-title">Golden Hour Collection</div>
-            <div class="creator">by Maya Studio <span class="badge">✓</span></div>
-            <div class="stats"><span>▧ 24 photos</span><span>♡ 1.2k</span></div>
-          </div>
-        </article>
-
-        <article class="album" data-category="fashion" data-search="urban fashion street style">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=80"
-                 alt="Fashion street style" loading="lazy">
-            <span class="cover-label">TRENDING</span>
-          </div>
-          <div class="album-info">
-            <div class="album-title">Urban Style Journal</div>
-            <div class="creator">by Style District <span class="badge vip">✓</span></div>
-            <div class="stats"><span>▧ 18 photos</span><span>♡ 856</span></div>
-          </div>
-        </article>
-
-        <article class="album" data-category="travel" data-search="mountain travel adventure nature">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=80"
-                 alt="Mountain landscape" loading="lazy">
-          </div>
-          <div class="album-info">
-            <div class="album-title">Beyond the Mountains</div>
-            <div class="creator">by Open Horizons</div>
-            <div class="stats"><span>▧ 32 photos</span><span>♡ 642</span></div>
-          </div>
-        </article>
-
-        <article class="album" data-category="lifestyle" data-search="coffee lifestyle morning">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=700&q=80"
-                 alt="Coffee shop atmosphere" loading="lazy">
-          </div>
-          <div class="album-info">
-            <div class="album-title">Slow Morning Moments</div>
-            <div class="creator">by Daily Chapters</div>
-            <div class="stats"><span>▧ 15 photos</span><span>♡ 439</span></div>
-          </div>
-        </article>
-
-        <article class="album" data-category="art" data-search="art design creative abstract">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=700&q=80"
-                 alt="Colourful abstract artwork" loading="lazy">
-          </div>
-          <div class="album-info">
-            <div class="album-title">Colour & Expression</div>
-            <div class="creator">by ArtHouse</div>
-            <div class="stats"><span>▧ 21 images</span><span>♡ 723</span></div>
-          </div>
-        </article>
-
-        <article class="album" data-category="photography" data-search="ocean sea nature photography">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=700&q=80"
-                 alt="Ocean waves" loading="lazy">
-          </div>
-          <div class="album-info">
-            <div class="album-title">The Ocean Diaries</div>
-            <div class="creator">by Blue Planet</div>
-            <div class="stats"><span>▧ 27 photos</span><span>♡ 951</span></div>
-          </div>
-        </article>
-
-        <article class="album" data-category="fashion" data-search="fashion accessories luxury">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=700&q=80"
-                 alt="Fashion and clothing" loading="lazy">
-          </div>
-          <div class="album-info">
-            <div class="album-title">Everyday Elegance</div>
-            <div class="creator">by Mode Collective</div>
-            <div class="stats"><span>▧ 16 photos</span><span>♡ 584</span></div>
-          </div>
-        </article>
-
-        <article class="album" data-category="travel" data-search="city travel architecture">
-          <div class="album-cover">
-            <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=700&q=80"
-                 alt="City skyline" loading="lazy">
-          </div>
-          <div class="album-info">
-            <div class="album-title">City Lights</div>
-            <div class="creator">by Night Explorer</div>
-            <div class="stats"><span>▧ 30 photos</span><span>♡ 1.1k</span></div>
-          </div>
-        </article>
-
-      </div>
-
-      <div class="empty-state" id="emptyState">
-        No albums found. Try another search or category.
-      </div>
-    </section>
-
-    <section class="section" id="creatorSection">
-      <div class="section-heading">
-        <div>
-          <h2>Creators to Discover</h2>
-          <p>Meet the people behind the albums.</p>
-        </div>
-        <span class="pink-text">Creator community</span>
-      </div>
-
-      <div class="creator-grid">
-        <div class="creator-card">
-          <div class="avatar">MS</div>
-          <div>
-            <div class="creator-name">Maya Studio <span class="badge">✓</span></div>
-            <div class="creator-small">Photography</div>
-          </div>
-        </div>
-
-        <div class="creator-card">
-          <div class="avatar">SD</div>
-          <div>
-            <div class="creator-name">Style District <span class="badge vip">✓</span></div>
-            <div class="creator-small">Fashion</div>
-          </div>
-        </div>
-
-        <div class="creator-card">
-          <div class="avatar">OH</div>
-          <div>
-            <div class="creator-name">Open Horizons</div>
-            <div class="creator-small">Travel & Nature</div>
-          </div>
-        </div>
-
-        <div class="creator-card">
-          <div class="avatar">EC</div>
-          <div>
-            <div class="creator-name">EromePlus Owner <span class="badge owner">✓</span></div>
-            <div class="creator-small">Platform owner demo</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="uploadSection">
-      <div class="section-heading">
-        <div>
-          <h2>Create an Album</h2>
-          <p>Preview your album before publishing.</p>
-        </div>
-      </div>
-
-      <div class="upload-box">
-        <h3>Share your creativity</h3>
-        <p>
-          This demonstration lets you select images and preview album details.
-          Nothing is uploaded to a server or made public.
-        </p>
-
-        <form class="upload-form" id="uploadForm">
-          <div class="field">
-            <label for="albumTitle">Album title</label>
-            <input id="albumTitle" type="text" maxlength="100"
-                   placeholder="Enter an album title" required>
-          </div>
-
-          <div class="field">
-            <label for="albumCategory">Category</label>
-            <select id="albumCategory" required>
-              <option value="photography">Photography</option>
-              <option value="fashion">Fashion</option>
-              <option value="travel">Travel</option>
-              <option value="lifestyle">Lifestyle</option>
-              <option value="art">Art & Design</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="albumDescription">Description</label>
-            <textarea id="albumDescription" maxlength="500"
-                      placeholder="Tell viewers about your album"></textarea>
-          </div>
-
-          <div class="field">
-            <label for="albumImages">Choose image files</label>
-            <input id="albumImages" type="file"
-                   accept="image/jpeg,image/png,image/webp"
-                   multiple required>
-          </div>
-
-          <div class="preview-list" id="previewList"></div>
-
-          <label class="checkbox-row">
-            <input type="checkbox" id="rightsCheck" required>
-            <span>
-              I confirm that I own these images or have permission to share them,
-              that everyone depicted is an adult who consented to this sharing,
-              and that the content follows the platform rules.
-            </span>
-          </label>
-
-          <button class="btn btn-primary" type="submit">
-            Preview Album
-          </button>
-        </form>
-
-        <div id="uploadResult" style="margin-top:18px"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="footer">
-    <div class="brand">Erome<span>Plus</span></div>
-    <p>Discover creators. Celebrate creativity.</p>
-
-    <div class="footer-links">
-      <a href="#exploreSection">Explore</a>
-      <a href="#creatorSection">Creators</a>
-      <a href="#uploadSection">Create an Album</a>
-      <a href="#safety">Safety</a>
+    <div class="album-grid" id="albumGrid">
+      <article class="album" data-category="photography" data-search="golden hour photography studio">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="Golden hour landscape" loading="lazy"><span class="cover-label">FEATURED</span></div>
+        <div class="album-info"><div class="album-title">Golden Hour Collection</div><div class="creator">by Maya Studio <span class="badge">✓</span></div><div class="stats"><span>▧ 24 photos</span><span>♡ 1.2k</span></div></div>
+      </article>
+      <article class="album" data-category="fashion" data-search="urban fashion street style">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="Fashion street style" loading="lazy"><span class="cover-label">TRENDING</span></div>
+        <div class="album-info"><div class="album-title">Urban Style Journal</div><div class="creator">by Style District <span class="badge vip">✓</span></div><div class="stats"><span>▧ 18 photos</span><span>♡ 856</span></div></div>
+      </article>
+      <article class="album" data-category="travel" data-search="mountain travel adventure nature">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="Mountain landscape" loading="lazy"></div>
+        <div class="album-info"><div class="album-title">Beyond the Mountains</div><div class="creator">by Open Horizons</div><div class="stats"><span>▧ 32 photos</span><span>♡ 642</span></div></div>
+      </article>
+      <article class="album" data-category="lifestyle" data-search="coffee lifestyle morning">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="Coffee shop atmosphere" loading="lazy"></div>
+        <div class="album-info"><div class="album-title">Slow Morning Moments</div><div class="creator">by Daily Chapters</div><div class="stats"><span>▧ 15 photos</span><span>♡ 439</span></div></div>
+      </article>
+      <article class="album" data-category="art" data-search="art design creative abstract">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="Abstract artwork" loading="lazy"></div>
+        <div class="album-info"><div class="album-title">Colour &amp; Expression</div><div class="creator">by ArtHouse</div><div class="stats"><span>▧ 21 images</span><span>♡ 723</span></div></div>
+      </article>
+      <article class="album" data-category="photography" data-search="ocean sea nature photography">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="Ocean waves" loading="lazy"></div>
+        <div class="album-info"><div class="album-title">The Ocean Diaries</div><div class="creator">by Blue Planet</div><div class="stats"><span>▧ 27 photos</span><span>♡ 951</span></div></div>
+      </article>
+      <article class="album" data-category="fashion" data-search="fashion accessories luxury">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="Fashion and clothing" loading="lazy"></div>
+        <div class="album-info"><div class="album-title">Everyday Elegance</div><div class="creator">by Mode Collective</div><div class="stats"><span>▧ 16 photos</span><span>♡ 584</span></div></div>
+      </article>
+      <article class="album" data-category="travel" data-search="city travel architecture">
+        <div class="album-cover"><img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&amp;fit=crop&amp;w=700&amp;q=80" alt="City skyline" loading="lazy"></div>
+        <div class="album-info"><div class="album-title">City Lights</div><div class="creator">by Night Explorer</div><div class="stats"><span>▧ 30 photos</span><span>♡ 1.1k</span></div></div>
+      </article>
     </div>
-
-    <p id="safety">
-      Adults only · Respect consent · Protect privacy · Report abuse
-    </p>
-    <p>© <span id="year"></span> EromePlus. All rights reserved.</p>
-  </footer>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script>
-    const ageScreen = document.getElementById("ageScreen");
-    const toast = document.getElementById("toast");
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.style.display = "block";
-
-      clearTimeout(window.toastTimer);
-
-      window.toastTimer = setTimeout(() => {
-        toast.style.display = "none";
-      }, 3500);
-    }
-
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-
-    document.getElementById("enterSite").addEventListener("click", () => {
-      ageScreen.style.display = "none";
-      sessionStorage.setItem("eromeplus_age_confirmed", "yes");
-    });
-
-    document.getElementById("leaveSite").addEventListener("click", () => {
-      document.body.innerHTML =
-        '<main style="padding:50px 20px;text-align:center;color:white">' +
-        '<h2>Access declined</h2>' +
-        '<p style="margin-top:12px;color:#aaa">You cannot enter this adults-only prototype.</p>' +
-        '</main>';
-    });
-
-    if (sessionStorage.getItem("eromeplus_age_confirmed") === "yes") {
-      ageScreen.style.display = "none";
-    }
-
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }
-
-    document.getElementById("browseButton").addEventListener("click", () => {
-      scrollToSection("exploreSection");
-    });
-
-    document.getElementById("exploreButton").addEventListener("click", () => {
-      scrollToSection("exploreSection");
-    });
-
-    document.getElementById("creatorsButton").addEventListener("click", () => {
-      scrollToSection("creatorSection");
-    });
-
-    document.getElementById("uploadButton").addEventListener("click", () => {
-      scrollToSection("uploadSection");
-    });
-
-    // Album search
-    const searchInputs = [
-      document.getElementById("searchInput"),
-      document.getElementById("mobileSearchInput")
-    ];
-
-    let activeCategory = "all";
-
-    function filterAlbums(searchTerm = "") {
-      const term = searchTerm.toLowerCase().trim();
-      const albums = [...document.querySelectorAll(".album")];
-      let visible = 0;
-
-      albums.forEach(album => {
-        const searchable =
-          (album.dataset.search || "") + " " + album.textContent;
-
-        const matchesSearch = searchable.toLowerCase().includes(term);
-        const matchesCategory =
-          activeCategory === "all" ||
-          album.dataset.category === activeCategory;
-
-        const show = matchesSearch && matchesCategory;
-
-        album.style.display = show ? "" : "none";
-
-        if (show) visible++;
-      });
-
-      document.getElementById("emptyState").style.display =
-        visible === 0 ? "block" : "none";
-    }
-
-    searchInputs.forEach(input => {
-      input.addEventListener("input", () => {
-        const value = input.value;
-
-        searchInputs.forEach(other => {
-          if (other !== input) other.value = value;
-        });
-
-        filterAlbums(value);
-      });
-    });
-
-    document.querySelectorAll(".category").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".category").forEach(item => {
-          item.classList.remove("active");
-        });
-
-        button.classList.add("active");
-        activeCategory = button.dataset.category;
-
-        filterAlbums(searchInputs[0].value);
-      });
-    });
-
-    // Local image preview only. No server upload occurs.
-    const imageInput = document.getElementById("albumImages");
-    const previewList = document.getElementById("previewList");
-    const uploadResult = document.getElementById("uploadResult");
-
-    let previewUrls = [];
-
-    imageInput.addEventListener("change", () => {
-      previewUrls.forEach(url => URL.revokeObjectURL(url));
-      previewUrls = [];
-      previewList.replaceChildren();
-      uploadResult.replaceChildren();
-
-      const files = Array.from(imageInput.files || []);
-
-      if (files.length > 20) {
-        imageInput.value = "";
-        showToast("Please select no more than 20 images.");
-        return;
-      }
-
-      for (const file of files) {
-        if (!file.type.startsWith("image/")) {
-          showToast("Only image files are supported.");
-          continue;
-        }
-
-        if (file.size > 10 * 1024 * 1024) {
-          showToast("One image is over the 10 MB preview limit.");
-          continue;
-        }
-
-        const url = URL.createObjectURL(file);
-        previewUrls.push(url);
-
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = "Selected image preview";
-
-        previewList.appendChild(img);
-      }
-    });
-
-    document.getElementById("uploadForm").addEventListener("submit", event => {
-      event.preventDefault();
-
-      const title = document.getElementById("albumTitle").value.trim();
-      const description =
-        document.getElementById("albumDescription").value.trim();
-      const category = document.getElementById("albumCategory").value;
-      const files = Array.from(imageInput.files || []);
-
-      if (!title || files.length === 0) {
-        showToast("Enter a title and select at least one image.");
-        return;
-      }
-
-      if (!document.getElementById("rightsCheck").checked) {
-        showToast("Please confirm your rights and consent.");
-        return;
-      }
-
-      const heading = document.createElement("h3");
-      heading.textContent = "Album preview: " + title;
-
-      const detail = document.createElement("p");
-      detail.style.cssText =
-        "color:#aaa;margin-top:10px;line-height:1.6;font-size:13px";
-
-      detail.textContent =
-        category + " · " + files.length + " image(s)" +
-        (description ? " · " + description : "");
-
-      const warning = document.createElement("p");
-      warning.style.cssText =
-        "color:#ff91a9;margin-top:10px;font-size:12px;line-height:1.6";
-
-      warning.textContent =
-        "Preview only. This album has not been uploaded, saved to an account, " +
-        "or published. Real publishing requires secure backend storage and moderation.";
-
-      uploadResult.replaceChildren(heading, detail, warning);
-
-      showToast("Your album preview is ready.");
-    });
-
-    window.addEventListener("beforeunload", () => {
-      previewUrls.forEach(url => URL.revokeObjectURL(url));
-    });
-
-    <!-- EromePlus Authentication -->
-<style>
-  .ep-account-btn {
-    background: #ff3864;
-    color: white;
-    border: 0;
-    padding: 10px 14px;
-    border-radius: 9px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .ep-auth-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 3000;
-    background: rgba(0,0,0,.82);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 18px;
-  }
-
-  .ep-auth-box {
-    width: 100%;
-    max-width: 410px;
-    background: #19191f;
-    color: white;
-    border: 1px solid #303039;
-    border-radius: 17px;
-    padding: 25px;
-    position: relative;
-  }
-
-  .ep-auth-box h2 {
-    margin-bottom: 8px;
-  }
-
-  .ep-auth-muted {
-    color: #a3a3b2;
-    font-size: 13px;
-    line-height: 1.6;
-    margin-bottom: 18px;
-  }
-
-  .ep-auth-box input {
-    display: block;
-    width: 100%;
-    padding: 13px;
-    margin: 10px 0;
-    background: #101014;
-    color: white;
-    border: 1px solid #303039;
-    border-radius: 8px;
-    outline: none;
-  }
-
-  .ep-auth-box input:focus {
-    border-color: #ff3864;
-  }
-
-  .ep-auth-submit {
-    width: 100%;
-    padding: 13px;
-    background: #ff3864;
-    color: white;
-    border: 0;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-top: 8px;
-    cursor: pointer;
-  }
-
-  .ep-auth-link {
-    color: #ff6685;
-    background: none;
-    border: 0;
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 13px;
-  }
-
-  .ep-auth-close {
-    position: absolute;
-    right: 15px;
-    top: 12px;
-    border: 0;
-    background: none;
-    color: white;
-    font-size: 25px;
-    cursor: pointer;
-  }
-
-  .ep-auth-message {
-    font-size: 13px;
-    line-height: 1.6;
-    margin-top: 14px;
-    overflow-wrap: anywhere;
-  }
-
-  .ep-auth-status {
-    color: #a3a3b2;
-    font-size: 11px;
-    margin-top: 6px;
-    overflow-wrap: anywhere;
-  }
-</style>
-
+    <div class="empty-state" id="emptyState">No albums found. Try another search or category.</div>
+  </section>
+
+  <section class="section" id="creatorSection">
+    <div class="section-heading"><div><h2>Creators to Discover</h2><p>Meet the people behind the albums.</p></div><span class="pink-text">Creator community</span></div>
+    <div class="creator-grid">
+      <div class="creator-card"><div class="avatar">MS</div><div><div class="creator-name">Maya Studio <span class="badge">✓</span></div><div class="creator-small">Photography</div></div></div>
+      <div class="creator-card"><div class="avatar">SD</div><div><div class="creator-name">Style District <span class="badge vip">✓</span></div><div class="creator-small">Fashion</div></div></div>
+      <div class="creator-card"><div class="avatar">OH</div><div><div class="creator-name">Open Horizons</div><div class="creator-small">Travel &amp; Nature</div></div></div>
+      <div class="creator-card"><div class="avatar">EC</div><div><div class="creator-name">EromePlus Owner <span class="badge owner">✓</span></div><div class="creator-small">Platform owner demo</div></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="uploadSection">
+    <div class="section-heading"><div><h2>Create an Album</h2><p>Preview your album before publishing.</p></div></div>
+    <div class="upload-box">
+      <h3>Share your creativity</h3>
+      <p>This demonstration lets you select images and preview album details. Nothing is uploaded to a server or made public.</p>
+      <form class="upload-form" id="uploadForm">
+        <div class="field"><label for="albumTitle">Album title</label><input id="albumTitle" type="text" maxlength="100" placeholder="Enter an album title" required></div>
+        <div class="field"><label for="albumCategory">Category</label><select id="albumCategory" required><option value="photography">Photography</option><option value="fashion">Fashion</option><option value="travel">Travel</option><option value="lifestyle">Lifestyle</option><option value="art">Art &amp; Design</option></select></div>
+        <div class="field"><label for="albumDescription">Description</label><textarea id="albumDescription" maxlength="500" placeholder="Tell viewers about your album"></textarea></div>
+        <div class="field"><label for="albumImages">Choose image files</label><input id="albumImages" type="file" accept="image/jpeg,image/png,image/webp" multiple required></div>
+        <div class="preview-list" id="previewList"></div>
+        <label class="checkbox-row"><input type="checkbox" id="rightsCheck" required><span>I confirm that I own these images or have permission to share them, that everyone depicted is an adult who consented to this sharing, and that the content follows the platform rules.</span></label>
+        <button class="btn btn-primary" type="submit">Preview Album</button>
+      </form>
+      <div id="uploadResult" style="margin-top:18px"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="brand">Erome<span>Plus</span></div>
+  <p>Discover creators. Celebrate creativity.</p>
+  <div class="footer-links"><a href="#exploreSection">Explore</a><a href="#creatorSection">Creators</a><a href="#uploadSection">Create an Album</a><a href="#safety">Safety</a></div>
+  <p id="safety">Adults only · Respect consent · Protect privacy · Report abuse</p>
+  <p>© <span id="year"></span> EromePlus. All rights reserved.</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Authentication modal: kept outside all JavaScript blocks -->
 <div class="ep-auth-overlay" id="epAuthOverlay">
   <div class="ep-auth-box">
-    <button class="ep-auth-close" id="epAuthClose"
-            aria-label="Close">&times;</button>
-
-    <div style="font-size:24px;font-weight:900;margin-bottom:20px">
-      Erome<span style="color:#ff3864">Plus</span>
-    </div>
-
+    <button class="ep-auth-close" id="epAuthClose" type="button" aria-label="Close">&times;</button>
+    <div style="font-size:24px;font-weight:900;margin-bottom:20px">Erome<span style="color:#ff3864">Plus</span></div>
     <h2 id="epAuthTitle">Welcome back</h2>
-
-    <p class="ep-auth-muted" id="epAuthDescription">
-      Log in to your EromePlus account.
-    </p>
-
+    <p class="ep-auth-muted" id="epAuthDescription">Log in to your EromePlus account.</p>
     <form id="epAuthForm">
-      <input id="epAuthEmail"
-             type="email"
-             placeholder="Email address"
-             autocomplete="email"
-             required>
-
-      <input id="epAuthPassword"
-             type="password"
-             placeholder="Password — at least 8 characters"
-             autocomplete="current-password"
-             minlength="8"
-             required>
-
-      <button class="ep-auth-submit" id="epAuthSubmit" type="submit">
-        Log In
-      </button>
+      <input id="epAuthEmail" type="email" placeholder="Email address" autocomplete="email" required>
+      <input id="epAuthPassword" type="password" placeholder="Password — at least 8 characters" autocomplete="current-password" minlength="8" required>
+      <button class="ep-auth-submit" id="epAuthSubmit" type="submit">Log In</button>
     </form>
-
-    <button class="ep-auth-link" id="epAuthSwitch">
-      New here? Create an account
-    </button>
-
+    <button class="ep-auth-link" id="epAuthSwitch" type="button">New here? Create an account</button>
     <br>
-
-    <button class="ep-auth-link" id="epAuthForgot">
-      Forgot your password?
-    </button>
-
-    <div class="ep-auth-message" id="epAuthMessage"
-         role="status" aria-live="polite"></div>
-
+    <button class="ep-auth-link" id="epAuthForgot" type="button">Forgot your password?</button>
+    <div class="ep-auth-message" id="epAuthMessage" role="status" aria-live="polite"></div>
     <div class="ep-auth-status" id="epAuthStatus"></div>
   </div>
 </div>
 
-<!-- Supabase JavaScript library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-(function () {
-  "use strict";
+"use strict";
 
-  /*
-    Replace these two example values with your actual
-    Supabase Project URL and Publishable Key.
-  */
-  const SUPABASE_URL = "https://xzwycixvgctelfzmoizu.supabase.co;
+/* General helpers */
+const $ = id => document.getElementById(id);
+const ageScreen = $("ageScreen");
+const toast = $("toast");
+let toastTimer;
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.style.display = "none", 3500);
+}
+
+$("year").textContent = new Date().getFullYear();
+
+/* Age gate: this runs independently of authentication. */
+$("enterSite").addEventListener("click", () => {
+  ageScreen.style.display = "none";
+  try {
+    sessionStorage.setItem("eromeplus_age_confirmed", "yes");
+  } catch (error) {}
+});
+
+$("leaveSite").addEventListener("click", () => {
+  document.body.innerHTML =
+    '<main style="padding:50px 20px;text-align:center;color:white">' +
+    '<h2>Access declined</h2><p style="margin-top:12px;color:#aaa">' +
+    'You cannot enter this adults-only prototype.</p></main>';
+});
+
+try {
+  if (sessionStorage.getItem("eromeplus_age_confirmed") === "yes") {
+    ageScreen.style.display = "none";
+  }
+} catch (error) {}
+
+/* Navigation */
+function scrollToSection(id) {
+  const section = $(id);
+  if (section) section.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+$("browseButton").addEventListener("click", () => scrollToSection("exploreSection"));
+$("exploreButton").addEventListener("click", () => scrollToSection("exploreSection"));
+$("creatorsButton").addEventListener("click", () => scrollToSection("creatorSection"));
+$("uploadButton").addEventListener("click", () => scrollToSection("uploadSection"));
+
+/* Search and category filters */
+const searchInputs = [$("searchInput"), $("mobileSearchInput")];
+let activeCategory = "all";
+
+function filterAlbums(searchTerm = "") {
+  const term = searchTerm.toLowerCase().trim();
+  const albums = [...document.querySelectorAll(".album")];
+  let visible = 0;
+
+  albums.forEach(album => {
+    const searchable = (album.dataset.search || "") + " " + album.textContent;
+    const matchesSearch = searchable.toLowerCase().includes(term);
+    const matchesCategory = activeCategory === "all" || album.dataset.category === activeCategory;
+    const shouldShow = matchesSearch && matchesCategory;
+    album.style.display = shouldShow ? "" : "none";
+    if (shouldShow) visible++;
+  });
+
+  $("emptyState").style.display = visible ? "none" : "block";
+}
+
+searchInputs.forEach(input => {
+  input.addEventListener("input", () => {
+    searchInputs.forEach(other => {
+      if (other !== input) other.value = input.value;
+    });
+    filterAlbums(input.value);
+  });
+});
+
+document.querySelectorAll(".category").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".category").forEach(item => item.classList.remove("active"));
+    button.classList.add("active");
+    activeCategory = button.dataset.category;
+    filterAlbums(searchInputs[0].value);
+  });
+});
+
+/* Local album preview only; this does not upload files to a server. */
+const imageInput = $("albumImages");
+const previewList = $("previewList");
+const uploadResult = $("uploadResult");
+let previewUrls = [];
+
+imageInput.addEventListener("change", () => {
+  previewUrls.forEach(url => URL.revokeObjectURL(url));
+  previewUrls = [];
+  previewList.replaceChildren();
+  uploadResult.replaceChildren();
+
+  const files = Array.from(imageInput.files || []);
+
+  if (files.length > 20) {
+    imageInput.value = "";
+    showToast("Please select no more than 20 images.");
+    return;
+  }
+
+  for (const file of files) {
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      showToast("Please use JPG, PNG, or WebP images.");
+      continue;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      showToast(file.name + " exceeds the 10 MB preview limit.");
+      continue;
+    }
+
+    const url = URL.createObjectURL(file);
+    previewUrls.push(url);
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "Selected image preview";
+    previewList.appendChild(img);
+  }
+});
+
+$("uploadForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const title = $("albumTitle").value.trim();
+  const description = $("albumDescription").value.trim();
+  const category = $("albumCategory").value;
+  const files = Array.from(imageInput.files || []);
+
+  if (!title || !files.length) {
+    showToast("Enter a title and select at least one image.");
+    return;
+  }
+  if (!$("rightsCheck").checked) {
+    showToast("Please confirm your rights and consent.");
+    return;
+  }
+
+  const heading = document.createElement("h3");
+  heading.textContent = "Album preview: " + title;
+
+  const detail = document.createElement("p");
+  detail.style.cssText = "color:#aaa;margin-top:10px;line-height:1.6;font-size:13px";
+  detail.textContent = category + " · " + files.length + " image(s)" +
+    (description ? " · " + description : "");
+
+  const warning = document.createElement("p");
+  warning.style.cssText = "color:#ff91a9;margin-top:10px;font-size:12px;line-height:1.6";
+  warning.textContent = "Preview only. Nothing has been uploaded or published. Server storage and moderation are still required.";
+
+  uploadResult.replaceChildren(heading, detail, warning);
+  showToast("Your album preview is ready.");
+});
+
+window.addEventListener("beforeunload", () => {
+  previewUrls.forEach(url => URL.revokeObjectURL(url));
+});
+</script>
+
+<script>
+/* Supabase authentication: isolated from the age gate and page interactions. */
+(function () {
+  const SUPABASE_URL = "https://xzwycixvgctelfzmoizu.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_p58aaLCmGmdtHpyY3Z1VgQ_3UJohXfA";
 
   const overlay = document.getElementById("epAuthOverlay");
@@ -1374,10 +489,10 @@
   const status = document.getElementById("epAuthStatus");
 
   let mode = "login";
-  let supabaseClient = null;
   let currentUser = null;
+  let client = null;
 
-  function showMessage(text, isError) {
+  function showMessage(text, isError = false) {
     message.textContent = text;
     message.style.color = isError ? "#ff8da5" : "#8de5a1";
   }
@@ -1401,16 +516,14 @@
 
     if (mode === "signup") {
       title.textContent = "Create your account";
-      description.textContent =
-        "Join EromePlus with your email address.";
+      description.textContent = "Join EromePlus with your email address.";
       submitButton.textContent = "Create Account";
       switchButton.textContent = "Already registered? Log in";
       forgotButton.style.display = "none";
       passwordInput.autocomplete = "new-password";
     } else {
       title.textContent = "Welcome back";
-      description.textContent =
-        "Log in to your EromePlus account.";
+      description.textContent = "Log in to your EromePlus account.";
       submitButton.textContent = "Log In";
       switchButton.textContent = "New here? Create an account";
       forgotButton.style.display = "inline-block";
@@ -1418,87 +531,60 @@
     }
   }
 
-  // Add the account button to your existing navigation.
   const navActions = document.querySelector(".nav-actions");
+  const accountButton = document.createElement("button");
+  accountButton.className = "ep-account-btn";
+  accountButton.type = "button";
+  accountButton.textContent = "👤 Account";
 
-  if (navActions) {
-    const accountButton = document.createElement("button");
-    accountButton.className = "ep-account-btn";
-    accountButton.id = "epAccountButton";
-    accountButton.textContent = "👤 Account";
-    accountButton.addEventListener("click", () => {
-      if (currentUser) {
-        handleLogout();
+  accountButton.addEventListener("click", async () => {
+    if (currentUser && client) {
+      accountButton.disabled = true;
+      const { error } = await client.auth.signOut();
+      accountButton.disabled = false;
+      if (error) {
+        showToast("Logout failed. Please try again.");
       } else {
-        setMode("login");
-        openModal();
+        currentUser = null;
+        updateAccountDisplay();
+        showToast("You have logged out.");
       }
-    });
+    } else {
+      setMode("login");
+      openModal();
+    }
+  });
 
-    navActions.insertBefore(accountButton, navActions.firstChild);
-  }
+  if (navActions) navActions.insertBefore(accountButton, navActions.firstChild);
 
-  document.getElementById("epAuthClose").addEventListener(
-    "click", closeModal
-  );
-
+  document.getElementById("epAuthClose").addEventListener("click", closeModal);
   overlay.addEventListener("click", event => {
     if (event.target === overlay) closeModal();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeModal();
   });
 
   switchButton.addEventListener("click", () => {
     setMode(mode === "login" ? "signup" : "login");
   });
 
-  // Set up Supabase.
-  if (
-    SUPABASE_URL.includes("PASTE_YOUR") ||
-    SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")
-  ) {
-    status.textContent =
-      "Setup required: add your Supabase Project URL and Publishable Key.";
-    console.warn("EromePlus: Supabase credentials have not been entered.");
-    return;
-  }
-
-  if (!window.supabase || !window.supabase.createClient) {
-    status.textContent =
-      "The authentication library did not load. Check your internet connection.";
-    return;
-  }
-
-  const client = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-  supabaseClient = client;
-
-  async function refreshAccount() {
-    const { data, error } = await client.auth.getUser();
-
-    if (error) {
-      currentUser = null;
-    } else {
-      currentUser = data.user || null;
-    }
-
-    const accountButton = document.getElementById("epAccountButton");
-
-    if (accountButton) {
-      accountButton.textContent = currentUser
-        ? "Log Out"
-        : "👤 Account";
-    }
-
+  function updateAccountDisplay() {
+    accountButton.textContent = currentUser ? "Log Out" : "👤 Account";
     status.textContent = currentUser
       ? "Signed in as " + currentUser.email
       : "Not signed in";
   }
 
+  if (!window.supabase || !window.supabase.createClient) {
+    status.textContent = "Authentication library unavailable. Check your connection and refresh.";
+    return;
+  }
+
+  client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
   form.addEventListener("submit", async event => {
     event.preventDefault();
-
     const email = emailInput.value.trim();
     const password = passwordInput.value;
 
@@ -1516,48 +602,33 @@
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin +
-              window.location.pathname
+            emailRedirectTo: window.location.origin + window.location.pathname
           }
         });
 
         if (error) throw error;
 
         if (data.session) {
-          showMessage(
-            "Your account has been created. You are now signed in.",
-            false
-          );
+          showMessage("Account created successfully. You are signed in.");
         } else {
-          showMessage(
-            "Registration submitted. Check your email for a verification link before logging in.",
-            false
-          );
+          showMessage("Registration submitted. Check your email for a verification link.");
         }
-
-        await refreshAccount();
       } else {
-        const { error } = await client.auth.signInWithPassword({
-          email,
-          password
-        });
-
+        const { error } = await client.auth.signInWithPassword({ email, password });
         if (error) throw error;
 
-        await refreshAccount();
-        showMessage("Login successful!", false);
-
+        showMessage("Login successful.");
         setTimeout(closeModal, 1000);
       }
+
+      const { data } = await client.auth.getUser();
+      currentUser = data.user || null;
+      updateAccountDisplay();
     } catch (error) {
-      showMessage(
-        error.message || "Something went wrong. Please try again.",
-        true
-      );
+      showMessage(error.message || "Something went wrong. Please try again.", true);
     } finally {
       submitButton.disabled = false;
-      submitButton.textContent =
-        mode === "signup" ? "Create Account" : "Log In";
+      submitButton.textContent = mode === "signup" ? "Create Account" : "Log In";
     }
   });
 
@@ -1565,65 +636,38 @@
     const email = emailInput.value.trim();
 
     if (!email) {
-      showMessage(
-        "Enter your email address first, then tap Forgot your password.",
-        true
-      );
+      showMessage("Enter your email address first.", true);
       return;
     }
 
-    clearMessage();
     forgotButton.disabled = true;
 
     try {
       const { error } = await client.auth.resetPasswordForEmail(email, {
         redirectTo: window.location.origin + window.location.pathname
       });
-
       if (error) throw error;
 
-      showMessage(
-        "If the address is registered, password recovery instructions will be sent to it.",
-        false
-      );
+      showMessage("If this email is registered, password recovery instructions will be sent.");
     } catch (error) {
-      showMessage(error.message, true);
+      showMessage(error.message || "Password recovery could not be started.", true);
     } finally {
       forgotButton.disabled = false;
     }
   });
 
-  async function handleLogout() {
-    if (!supabaseClient || !currentUser) return;
-
-    const { error } = await supabaseClient.auth.signOut();
-
-    if (error) {
-      showToast("Logout failed. Please try again.");
-      return;
-    }
-
-    currentUser = null;
-    await refreshAccount();
-    showToast("You have logged out.");
-  }
-
   client.auth.onAuthStateChange((event, session) => {
     currentUser = session ? session.user : null;
-
-    const accountButton = document.getElementById("epAccountButton");
-
-    if (accountButton) {
-      accountButton.textContent = currentUser ? "Log Out" : "👤 Account";
-    }
-
-    status.textContent = currentUser
-      ? "Signed in as " + currentUser.email
-      : "Not signed in";
+    updateAccountDisplay();
   });
 
-  refreshAccount();
-
+  client.auth.getUser().then(({ data }) => {
+    currentUser = data.user || null;
+    updateAccountDisplay();
+  }).catch(() => {
+    currentUser = null;
+    updateAccountDisplay();
+  });
 })();
 </script>
 
