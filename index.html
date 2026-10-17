@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EromePlus — Premium Media</title>
+
+<meta name="description" content="Discover photo galleries and media collections on EromePlus.">
+
+<style>
+:root {
+  --bg: #0b0b0e;
+  --panel: #141419;
+  --card: #1a1a21;
+  --text: #f6f6f8;
+  --muted: #9999a6;
+  --accent: #ff3864;
+  --border: #292932;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* HEADER */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(11, 11, 14, .96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: auto;
+  padding: 16px 5%;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  white-space: nowrap;
+  letter-spacing: -1px;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.search {
+  flex: 1;
+  position: relative;
+}
+
+.search input {
+  width: 100%;
+  padding: 12px 16px;
+  color: white;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+}
+
+.search input:focus {
+  border-color: var(--accent);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 11px 16px;
+  border: 0;
+  border-radius: 9px;
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-secondary {
+  background: var(--panel);
+  color: white;
+  border: 1px solid var(--border);
+}
+
+/* NAVIGATION */
+
+nav {
+  max-width: 1400px;
+  margin: auto;
+  padding: 0 5%;
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+}
+
+nav a {
+  padding: 15px 0;
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+nav a:hover,
+nav a.active {
+  color: white;
+  border-bottom: 2px solid var(--accent);
+}
+
+/* MAIN */
+
+.container {
+  max-width: 1400px;
+  margin: auto;
+  padding: 30px 5%;
+}
+
+.notice {
+  background: #19151b;
+  border: 1px solid #38212c;
+  padding: 13px 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  color: #d6c4cc;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* FEATURED */
+
+.hero {
+  min-height: 300px;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 35px;
+  background:
+    linear-gradient(0deg, rgba(0,0,0,.95), rgba(0,0,0,.05)),
+    url("https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1500&q=80")
+    center 35% / cover;
+}
+
+.hero-content {
+  padding: 30px;
+  max-width: 600px;
+}
+
+.eyebrow {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  padding: 7px 11px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 4vw, 44px);
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: #dedee4;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+/* SECTIONS */
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 30px 0 18px;
+}
+
+.section-head h2 {
+  font-size: 22px;
+}
+
+.section-head p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.section-link {
+  color: var(--accent);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ALBUM GRID */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.album {
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform .2s, border-color .2s;
+}
+
+.album:hover {
+  transform: translateY(-4px);
+  border-color: #555560;
+}
+
+.cover {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  position: relative;
+  background: #202027;
+  overflow: hidden;
+}
+
+.cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform .3s;
+}
+
+.album:hover .cover img {
+  transform: scale(1.04);
+}
+
+.cover-label {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  padding: 6px 8px;
+  background: rgba(0,0,0,.72);
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.album-info {
+  padding: 14px;
+}
+
+.album-title {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+
+.creator {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.album-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 13px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* EMPTY / SEARCH STATE */
+
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 45px 15px;
+  color: var(--muted);
+  background: var(--panel);
+  border-radius: 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* FOOTER */
+
+footer {
+  margin-top: 60px;
+  border-top: 1px solid var(--border);
+  padding: 30px 5%;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 2;
+}
+
+footer a {
+  margin: 0 8px;
+}
+
+/* MODALS */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(0,0,0,.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  background: #17171e;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 25px;
+}
+
+.modal-box h2 {
+  margin-bottom: 15px;
+}
+
+.modal-box p {
+  color: #c2c2cc;
+  line-height: 1.7;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.modal-box button {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.close {
+  float: right;
+  background: transparent;
+  color: white;
+  border: 0;
+  font-size: 24px;
+}
+
+footer a:hover {
+  color: white;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .header-inner {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .search {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 650px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .header-inner {
+    padding: 14px 4%;
+  }
+
+  nav {
+    padding: 0 4%;
+    gap: 22px;
+  }
+
+  .container {
+    padding: 20px 4%;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .btn {
+    padding: 10px 11px;
+    font-size: 12px;
+  }
+
+  .hero {
+    min-height: 280px;
+  }
+
+  .hero-content {
+    padding: 20px;
+  }
+
+  .section-head h2 {
+    font-size: 19px;
+  }
+
+  .album-info {
+    padding: 10px;
+  }
+
+  .album-title {
+    font-size: 13px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+
+    <a class="logo" href="#" aria-label="EromePlus home">
+      Erome<span>Plus</span>
+    </a>
+
+    <div class="search">
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search public albums..."
+        aria-label="Search public albums"
+      >
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-secondary" id="loginBtn">
+        Log in
+      </button>
+
+      <button class="btn btn-primary" id="signupBtn">
+        Sign up
+      </button>
+    </div>
+  </div>
+
+  <nav>
+    <a href="#" class="active" data-filter="all">Home</a>
+    <a href="#trending" data-filter="trending">Trending</a>
+    <a href="#recent" data-filter="recent">Recent</a>
+    <a href="#photos" data-filter="photos">Photos</a>
+    <a href="#videos" data-filter="videos">Videos</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <div class="notice">
+    <strong>Welcome to EromePlus.</strong>
+    This is a public gallery demonstration. Sample cards are illustrative
+    and do not represent real user uploads. The production platform will
+    be restricted to adults and will enforce its regional registration policy.
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">Discover EromePlus</span>
+
+      <h1>Your next favourite collection starts here.</h1>
+
+      <p>
+        Explore galleries, discover creators, and find collections
+        worth sharing.
+      </p>
+
+      <button class="btn btn-primary" id="exploreBtn">
+        Explore albums →
+      </button>
+    </div>
+  </section>
+
+  <section id="trending">
+    <div class="section-head">
+      <div>
+        <h2>Featured collections</h2>
+        <p>Discover handpicked gallery previews.</p>
+      </div>
+
+      <a href="#albums" class="section-link">View collections →</a>
+    </div>
+
+    <div class="grid" id="featuredGrid"></div>
+  </section>
+
+  <section id="albums">
+    <div class="section-head" id="recent">
+      <div>
+        <h2 id="albumHeading">Explore albums</h2>
+        <p id="albumDescription">Browse the latest public collections.</p>
+      </div>
+    </div>
+
+    <div class="grid" id="albumGrid"></div>
+  </section>
+
+</main>
+
+<footer>
+  <p><strong>EromePlus</strong> — Independent media-sharing platform concept.</p>
+
+  <p>
+    <a href="#about" id="aboutLink">About</a>
+    <a href="#rules" id="rulesLink">Community rules</a>
+    <a href="#privacy" id="privacyLink">Privacy</a>
+    <a href="#report" id="reportLink">Report content</a>
+  </p>
+
+  <p>Adults only. Consent, privacy, and lawful content are essential.</p>
+
+  <p>© <span id="year"></span> EromePlus.</p>
+</footer>
+
+<div class="modal hidden" id="modal" role="dialog"
+     aria-modal="true" aria-labelledby="modalTitle">
+
+  <div class="modal-box">
+    <button class="close" id="closeModal" aria-label="Close dialog">
+      ×
+    </button>
+
+    <h2 id="modalTitle">EromePlus</h2>
+
+    <p id="modalText"></p>
+
+    <button class="btn btn-primary" id="modalPrimary">
+      Continue
+    </button>
+
+    <button class="btn btn-secondary" id="modalSecondary">
+      Close
+    </button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/*
+  EromePlus V1 frontend demonstration.
+
+  IMPORTANT:
+  - Sample albums are not real user uploads.
+  - Registration is not implemented in this frontend.
+  - Region checks in the browser are only demonstrations.
+  - Production restrictions MUST be enforced by a backend.
+*/
+
+const sampleAlbums = [
+  {
+    id: 1,
+    title: "Featured Photography Collection",
+    creator: "EromePlus Editorial",
+    category: "photos",
+    featured: true,
+    trending: true,
+    image: "photo-1534528741775-53994a69daeb",
+    description: "A curated portrait photography preview."
+  },
+  {
+    id: 2,
+    title: "Modern Portraits",
+    creator: "Studio Preview",
+    category: "photos",
+    featured: true,
+    trending: true,
+    image: "photo-1524504388940-b1c1722653e1",
+    description: "A sample portrait collection."
+  },
+  {
+    id: 3,
+    title: "Creative Fashion Gallery",
+    creator: "Gallery Preview",
+    category: "photos",
+    featured: false,
+    trending: true,
+    image: "photo-1529139574466-a303027c1d8b",
+    description: "A sample fashion photography gallery."
+  },
+  {
+    id: 4,
+    title: "Lifestyle Photography",
+    creator: "Creator Preview",
+    category: "photos",
+    featured: false,
+    trending: false,
+    image: "photo-1515886657613-9f3515b0c78f",
+    description: "A sample lifestyle collection."
+  },
+  {
+    id: 5,
+    title: "Artistic Portraits",
+    creator: "Studio Preview",
+    category: "photos",
+    featured: false,
+    trending: true,
+    image: "photo-1506794778202-cad84cf45f1d",
+    description: "A sample portrait photography collection."
+  },
+  {
+    id: 6,
+    title: "The Photography Edit",
+    creator: "EromePlus Editorial",
+    category: "photos",
+    featured: false,
+    trending: false,
+    image: "photo-1531123897727-8f129e1688ce",
+    description: "An editorial-style gallery preview."
+  },
+  {
+    id: 7,
+    title: "Urban Style Collection",
+    creator: "Gallery Preview",
+    category: "photos",
+    featured: false,
+    trending: true,
+    image: "photo-1529139574466-a303027c1d8b",
+    description: "A sample urban-style collection."
+  },
+  {
+    id: 8,
+    title: "Portraits in Focus",
+    creator: "Studio Preview",
+    category: "photos",
+    featured: false,
+    trending: false,
+    image: "photo-1534528741775-53994a69daeb",
+    description: "A sample portrait gallery."
+  }
+];
+
+const featuredGrid = document.getElementById("featuredGrid");
+const albumGrid = document.getElementById("albumGrid");
+const searchInput = document.getElementById("searchInput");
+const albumHeading = document.getElementById("albumHeading");
+const albumDescription = document.getElementById("albumDescription");
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalText = document.getElementById("modalText");
+const modalPrimary = document.getElementById("modalPrimary");
+const modalSecondary = document.getElementById("modalSecondary");
+
+let currentFilter = "all";
+let currentQuery = "";
+let activeAlbum = null;
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+function imageURL(id) {
+  return "https://images.unsplash.com/" + id +
+    "?auto=format&fit=crop&w=700&q=80";
+}
+
+function createAlbumCard(album) {
+  const card = document.createElement("article");
+  card.className = "album";
+
+  const cover = document.createElement("div");
+  cover.className = "cover";
+
+  const img = document.createElement("img");
+  img.src = imageURL(album.image);
+  img.alt = album.title;
+  img.loading = "lazy";
+
+  img.onerror = function() {
+    cover.style.background = "#252530";
+    img.style.display = "none";
+  };
+
+  const label = document.createElement("span");
+  label.className = "cover-label";
+  label.textContent = "PHOTO GALLERY";
+
+  cover.append(img, label);
+
+  const info = document.createElement("div");
+  info.className = "album-info";
+
+  const title = document.createElement("h3");
+  title.className = "album-title";
+  title.textContent = album.title;
+
+  const creator = document.createElement("p");
+  creator.className = "creator";
+  creator.textContent = "By " + album.creator;
+
+  const stats = document.createElement("div");
+  stats.className = "album-stats";
+
+  const type = document.createElement("span");
+  type.textContent = "Photo album";
+
+  const status = document.createElement("span");
+  status.textContent = album.trending ? "Trending" : "Gallery";
+
+  stats.append(type, status);
+  info.append(title, creator, stats);
+  card.append(cover, info);
+
+  card.tabIndex = 0;
+  card.setAttribute("role", "button");
+  card.setAttribute("aria-label", "Open " + album.title);
+
+  card.addEventListener("click", function() {
+    activeAlbum = album;
+    showModal(
+      album.title,
+      album.description +
+        "\n\nThis is a demonstration card. Album pages and real media " +
+        "will be connected to the database in a later version.",
+      "Share album",
+      true
+    );
+  });
+
+  card.addEventListener("keydown", function(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      card.click();
+    }
+  });
+
+  return card;
+}
+
+function renderGrid(element, albums) {
+  element.replaceChildren();
+
+  if (albums.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "No collections match your search.";
+    element.appendChild(empty);
+    return;
+  }
+
+  albums.forEach(function(album) {
+    element.appendChild(createAlbumCard(album));
+  });
+}
+
+function filteredAlbums() {
+  return sampleAlbums.filter(function(album) {
+    const queryMatch =
+      (album.title + " " + album.creator + " " + album.category)
+        .toLowerCase()
+        .includes(currentQuery.toLowerCase());
+
+    let filterMatch = true;
+
+    if (currentFilter === "trending") {
+      filterMatch = album.trending;
+    } else if (currentFilter === "recent") {
+      filterMatch = true;
+    } else if (currentFilter === "photos") {
+      filterMatch = album.category === "photos";
+    } else if (currentFilter === "videos") {
+      filterMatch = album.category === "videos";
+    }
+
+    return queryMatch && filterMatch;
+  });
+}
+
+function render() {
+  const featured = sampleAlbums.filter(function(album) {
+    return album.featured;
+  });
+
+  renderGrid(featuredGrid, featured);
+  renderGrid(albumGrid, filteredAlbums());
+
+  if (currentQuery) {
+    albumHeading.textContent = "Search results";
+    albumDescription.textContent =
+      "Results for: " + currentQuery;
+  } else if (currentFilter === "trending") {
+    albumHeading.textContent = "Trending collections";
+    albumDescription.textContent =
+      "Explore featured trending previews.";
+  } else if (currentFilter === "recent") {
+    albumHeading.textContent = "Recent collections";
+    albumDescription.textContent =
+      "Sample collections for the homepage demonstration.";
+  } else if (currentFilter === "photos") {
+    albumHeading.textContent = "Photo galleries";
+    albumDescription.textContent =
+      "Browse photo gallery previews.";
+  } else if (currentFilter === "videos") {
+    albumHeading.textContent = "Video collections";
+    albumDescription.textContent =
+      "Video collections will appear when the video feature is implemented.";
+  } else {
+    albumHeading.textContent = "Explore albums";
+    albumDescription.textContent =
+      "Browse the latest public collections.";
+  }
+}
+
+function showModal(title, message, primaryText, shareMode) {
+  modalTitle.textContent = title;
+  modalText.textContent = message;
+  modalPrimary.textContent = primaryText || "Continue";
+  modal.classList.remove("hidden");
+
+  modalPrimary.onclick = async function() {
+    if (shareMode && activeAlbum) {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: activeAlbum.title,
+            text: activeAlbum.description,
+            url: location.href
+          });
+        } catch (error) {
+          // Sharing was cancelled or is unavailable.
+        }
+      } else if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(location.href);
+          modalText.textContent =
+            "Page link copied. Individual album links will be added " +
+            "when album pages are implemented.";
+        } catch (error) {
+          modalText.textContent =
+            "Copying is unavailable in this browser. Copy the page " +
+            "address from your browser instead.";
+        }
+      } else {
+        modalText.textContent =
+          "Copy the page address from your browser to share it.";
+      }
+    } else {
+      modal.classList.add("hidden");
+    }
+  };
+}
+
+function closeModal() {
+  modal.classList.add("hidden");
+}
+
+document.getElementById("closeModal").addEventListener(
+  "click", closeModal
+);
+
+modalSecondary.addEventListener("click", closeModal);
+
+modal.addEventListener("click", function(event) {
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+});
+
+searchInput.addEventListener("input", function() {
+  currentQuery = searchInput.value.trim();
+  render();
+});
+
+document.querySelectorAll("nav a").forEach(function(link) {
+  link.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    document.querySelectorAll("nav a").forEach(function(item) {
+      item.classList.remove("active");
+    });
+
+    link.classList.add("active");
+    currentFilter = link.dataset.filter;
+
+    render();
+
+    document.getElementById("albums").scrollIntoView({
+      behavior: "smooth"
+    });
+  });
+});
+
+document.getElementById("exploreBtn").addEventListener(
+  "click", function() {
+    document.getElementById("albums").scrollIntoView({
+      behavior: "smooth"
+    });
+  }
+);
+
+function openRegistrationMessage() {
+  showModal(
+    "EromePlus registration",
+    "Registration is not active in this prototype. In the production " +
+    "version, registration will require an eligible region, adult " +
+    "age verification, and acceptance of the platform rules. " +
+    "Regional eligibility must be verified by the server.",
+    "Understood",
+    false
+  );
+}
+
+document.getElementById("signupBtn").addEventListener(
+  "click", openRegistrationMessage
+);
+
+document.getElementById("loginBtn").addEventListener(
+  "click", function() {
+    showModal(
+      "Log in to EromePlus",
+      "User login will be connected after the secure authentication " +
+      "backend is configured.",
+      "Understood",
+      false
+    );
+  }
+);
+
+const footerMessages = {
+  about: "EromePlus is an independent media-sharing platform concept.",
+  rules: "The platform will prohibit illegal content, minors in sexual " +
+    "content, non-consensual intimate imagery, and material uploaded " +
+    "without the required rights or consent.",
+  privacy: "The production platform will need a published privacy policy " +
+    "explaining account data, media storage, retention, and user rights.",
+  report: "A reporting form and a process for promptly reviewing " +
+    "and removing prohibited content will be implemented before launch."
+};
+
+[
+  ["aboutLink", "About EromePlus", "about"],
+  ["rulesLink", "Community rules", "rules"],
+  ["privacyLink", "Privacy", "privacy"],
+  ["reportLink", "Report content", "report"]
+].forEach(function(item) {
+  document.getElementById(item[0]).addEventListener(
+    "click", function(event) {
+      event.preventDefault();
+      showModal(
+        item[1],
+        footerMessages[item[2]],
+        "Close",
+        false
+      );
+    }
+  );
+});
+
+render();
+</script>
+
+</body>
+</html>
