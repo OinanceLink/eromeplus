@@ -1187,7 +1187,445 @@
     window.addEventListener("beforeunload", () => {
       previewUrls.forEach(url => URL.revokeObjectURL(url));
     });
-  </script>
+
+    <!-- EromePlus Authentication -->
+<style>
+  .ep-account-btn {
+    background: #ff3864;
+    color: white;
+    border: 0;
+    padding: 10px 14px;
+    border-radius: 9px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .ep-auth-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    background: rgba(0,0,0,.82);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+  }
+
+  .ep-auth-box {
+    width: 100%;
+    max-width: 410px;
+    background: #19191f;
+    color: white;
+    border: 1px solid #303039;
+    border-radius: 17px;
+    padding: 25px;
+    position: relative;
+  }
+
+  .ep-auth-box h2 {
+    margin-bottom: 8px;
+  }
+
+  .ep-auth-muted {
+    color: #a3a3b2;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .ep-auth-box input {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0;
+    background: #101014;
+    color: white;
+    border: 1px solid #303039;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  .ep-auth-box input:focus {
+    border-color: #ff3864;
+  }
+
+  .ep-auth-submit {
+    width: 100%;
+    padding: 13px;
+    background: #ff3864;
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+
+  .ep-auth-link {
+    color: #ff6685;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 13px;
+  }
+
+  .ep-auth-close {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    border: 0;
+    background: none;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .ep-auth-message {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .ep-auth-status {
+    color: #a3a3b2;
+    font-size: 11px;
+    margin-top: 6px;
+    overflow-wrap: anywhere;
+  }
+</style>
+
+<div class="ep-auth-overlay" id="epAuthOverlay">
+  <div class="ep-auth-box">
+    <button class="ep-auth-close" id="epAuthClose"
+            aria-label="Close">&times;</button>
+
+    <div style="font-size:24px;font-weight:900;margin-bottom:20px">
+      Erome<span style="color:#ff3864">Plus</span>
+    </div>
+
+    <h2 id="epAuthTitle">Welcome back</h2>
+
+    <p class="ep-auth-muted" id="epAuthDescription">
+      Log in to your EromePlus account.
+    </p>
+
+    <form id="epAuthForm">
+      <input id="epAuthEmail"
+             type="email"
+             placeholder="Email address"
+             autocomplete="email"
+             required>
+
+      <input id="epAuthPassword"
+             type="password"
+             placeholder="Password — at least 8 characters"
+             autocomplete="current-password"
+             minlength="8"
+             required>
+
+      <button class="ep-auth-submit" id="epAuthSubmit" type="submit">
+        Log In
+      </button>
+    </form>
+
+    <button class="ep-auth-link" id="epAuthSwitch">
+      New here? Create an account
+    </button>
+
+    <br>
+
+    <button class="ep-auth-link" id="epAuthForgot">
+      Forgot your password?
+    </button>
+
+    <div class="ep-auth-message" id="epAuthMessage"
+         role="status" aria-live="polite"></div>
+
+    <div class="ep-auth-status" id="epAuthStatus"></div>
+  </div>
+</div>
+
+<!-- Supabase JavaScript library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+(function () {
+  "use strict";
+
+  /*
+    Replace these two example values with your actual
+    Supabase Project URL and Publishable Key.
+  */
+  const SUPABASE_URL = "https://xzwycixvgctelfzmoizu.supabase.co;
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_p58aaLCmGmdtHpyY3Z1VgQ_3UJohXfA";
+
+  const overlay = document.getElementById("epAuthOverlay");
+  const title = document.getElementById("epAuthTitle");
+  const description = document.getElementById("epAuthDescription");
+  const form = document.getElementById("epAuthForm");
+  const emailInput = document.getElementById("epAuthEmail");
+  const passwordInput = document.getElementById("epAuthPassword");
+  const submitButton = document.getElementById("epAuthSubmit");
+  const switchButton = document.getElementById("epAuthSwitch");
+  const forgotButton = document.getElementById("epAuthForgot");
+  const message = document.getElementById("epAuthMessage");
+  const status = document.getElementById("epAuthStatus");
+
+  let mode = "login";
+  let supabaseClient = null;
+  let currentUser = null;
+
+  function showMessage(text, isError) {
+    message.textContent = text;
+    message.style.color = isError ? "#ff8da5" : "#8de5a1";
+  }
+
+  function clearMessage() {
+    message.textContent = "";
+  }
+
+  function openModal() {
+    clearMessage();
+    overlay.style.display = "flex";
+  }
+
+  function closeModal() {
+    overlay.style.display = "none";
+  }
+
+  function setMode(newMode) {
+    mode = newMode;
+    clearMessage();
+
+    if (mode === "signup") {
+      title.textContent = "Create your account";
+      description.textContent =
+        "Join EromePlus with your email address.";
+      submitButton.textContent = "Create Account";
+      switchButton.textContent = "Already registered? Log in";
+      forgotButton.style.display = "none";
+      passwordInput.autocomplete = "new-password";
+    } else {
+      title.textContent = "Welcome back";
+      description.textContent =
+        "Log in to your EromePlus account.";
+      submitButton.textContent = "Log In";
+      switchButton.textContent = "New here? Create an account";
+      forgotButton.style.display = "inline-block";
+      passwordInput.autocomplete = "current-password";
+    }
+  }
+
+  // Add the account button to your existing navigation.
+  const navActions = document.querySelector(".nav-actions");
+
+  if (navActions) {
+    const accountButton = document.createElement("button");
+    accountButton.className = "ep-account-btn";
+    accountButton.id = "epAccountButton";
+    accountButton.textContent = "👤 Account";
+    accountButton.addEventListener("click", () => {
+      if (currentUser) {
+        handleLogout();
+      } else {
+        setMode("login");
+        openModal();
+      }
+    });
+
+    navActions.insertBefore(accountButton, navActions.firstChild);
+  }
+
+  document.getElementById("epAuthClose").addEventListener(
+    "click", closeModal
+  );
+
+  overlay.addEventListener("click", event => {
+    if (event.target === overlay) closeModal();
+  });
+
+  switchButton.addEventListener("click", () => {
+    setMode(mode === "login" ? "signup" : "login");
+  });
+
+  // Set up Supabase.
+  if (
+    SUPABASE_URL.includes("PASTE_YOUR") ||
+    SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")
+  ) {
+    status.textContent =
+      "Setup required: add your Supabase Project URL and Publishable Key.";
+    console.warn("EromePlus: Supabase credentials have not been entered.");
+    return;
+  }
+
+  if (!window.supabase || !window.supabase.createClient) {
+    status.textContent =
+      "The authentication library did not load. Check your internet connection.";
+    return;
+  }
+
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  supabaseClient = client;
+
+  async function refreshAccount() {
+    const { data, error } = await client.auth.getUser();
+
+    if (error) {
+      currentUser = null;
+    } else {
+      currentUser = data.user || null;
+    }
+
+    const accountButton = document.getElementById("epAccountButton");
+
+    if (accountButton) {
+      accountButton.textContent = currentUser
+        ? "Log Out"
+        : "👤 Account";
+    }
+
+    status.textContent = currentUser
+      ? "Signed in as " + currentUser.email
+      : "Not signed in";
+  }
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    clearMessage();
+    submitButton.disabled = true;
+    submitButton.textContent = "Please wait...";
+
+    try {
+      if (mode === "signup") {
+        if (password.length < 8) {
+          throw new Error("Your password must contain at least 8 characters.");
+        }
+
+        const { data, error } = await client.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin +
+              window.location.pathname
+          }
+        });
+
+        if (error) throw error;
+
+        if (data.session) {
+          showMessage(
+            "Your account has been created. You are now signed in.",
+            false
+          );
+        } else {
+          showMessage(
+            "Registration submitted. Check your email for a verification link before logging in.",
+            false
+          );
+        }
+
+        await refreshAccount();
+      } else {
+        const { error } = await client.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        await refreshAccount();
+        showMessage("Login successful!", false);
+
+        setTimeout(closeModal, 1000);
+      }
+    } catch (error) {
+      showMessage(
+        error.message || "Something went wrong. Please try again.",
+        true
+      );
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent =
+        mode === "signup" ? "Create Account" : "Log In";
+    }
+  });
+
+  forgotButton.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+
+    if (!email) {
+      showMessage(
+        "Enter your email address first, then tap Forgot your password.",
+        true
+      );
+      return;
+    }
+
+    clearMessage();
+    forgotButton.disabled = true;
+
+    try {
+      const { error } = await client.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + window.location.pathname
+      });
+
+      if (error) throw error;
+
+      showMessage(
+        "If the address is registered, password recovery instructions will be sent to it.",
+        false
+      );
+    } catch (error) {
+      showMessage(error.message, true);
+    } finally {
+      forgotButton.disabled = false;
+    }
+  });
+
+  async function handleLogout() {
+    if (!supabaseClient || !currentUser) return;
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      showToast("Logout failed. Please try again.");
+      return;
+    }
+
+    currentUser = null;
+    await refreshAccount();
+    showToast("You have logged out.");
+  }
+
+  client.auth.onAuthStateChange((event, session) => {
+    currentUser = session ? session.user : null;
+
+    const accountButton = document.getElementById("epAccountButton");
+
+    if (accountButton) {
+      accountButton.textContent = currentUser ? "Log Out" : "👤 Account";
+    }
+
+    status.textContent = currentUser
+      ? "Signed in as " + currentUser.email
+      : "Not signed in";
+  });
+
+  refreshAccount();
+
+})();
+</script>
 
 </body>
 </html>
