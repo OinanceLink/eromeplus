@@ -457,3 +457,74 @@ footer a:hover {
     font-size: 13px;
   }
 }
+
+/* EROM EPLUS VERIFICATION BADGES */
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  margin-left: 5px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  vertical-align: middle;
+}
+
+/* PREMIUM MEMBER — BLUE */
+
+.premium-badge {
+  background: #1687ff;
+  box-shadow: 0 0 8px rgba(22, 135, 255, 0.25);
+}
+
+/* VIP MEMBER — BLUE WITH DISTINCTIVE BORDER */
+
+.vip-badge {
+  background: #087bff;
+  border: 2px solid #a8d4ff;
+  box-shadow: 0 0 8px rgba(8, 123, 255, 0.35);
+}
+
+/* PLATFORM OWNER — PINK */
+
+.owner-badge {
+  background: #ff3864;
+  box-shadow: 0 0 9px rgba(255, 56, 100, 0.4);
+}
+
+/* USERNAME */
+
+.username {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  font-weight: 700;
+}
+
+/* MEMBERSHIP LABELS */
+
+.member-label {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.premium-label,
+.vip-label {
+  background: rgba(22, 135, 255, 0.13);
+  color: #55aaff;
+}
+
+.owner-label {
+  background: rgba(255, 56, 100, 0.13);
+  color: #ff6385;
+}
